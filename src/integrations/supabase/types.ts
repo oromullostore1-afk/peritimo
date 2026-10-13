@@ -14,16 +14,280 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      meeting_activity: {
+        Row: {
+          action: string
+          actor_id: string | null
+          changes: Json
+          created_at: string
+          id: string
+          meeting_id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          changes?: Json
+          created_at?: string
+          id?: string
+          meeting_id: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          changes?: Json
+          created_at?: string
+          id?: string
+          meeting_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meeting_activity_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meeting_activity_meeting_id_fkey"
+            columns: ["meeting_id"]
+            isOneToOne: false
+            referencedRelation: "meetings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meetings: {
+        Row: {
+          city: string | null
+          closed_at: string | null
+          company: string | null
+          confirmed_at: string | null
+          created_at: string
+          created_by: string
+          duration_min: number
+          held_at: string | null
+          id: string
+          instagram: string | null
+          lead_name: string
+          lost_at: string | null
+          next_action: string | null
+          no_show_at: string | null
+          notes: string | null
+          origin: string | null
+          potential_value: number | null
+          proposal_sent_at: string | null
+          responsible_id: string
+          segment_id: string | null
+          starts_at: string
+          status: Database["public"]["Enums"]["meeting_status"]
+          updated_at: string
+          whatsapp: string | null
+        }
+        Insert: {
+          city?: string | null
+          closed_at?: string | null
+          company?: string | null
+          confirmed_at?: string | null
+          created_at?: string
+          created_by?: string
+          duration_min?: number
+          held_at?: string | null
+          id?: string
+          instagram?: string | null
+          lead_name: string
+          lost_at?: string | null
+          next_action?: string | null
+          no_show_at?: string | null
+          notes?: string | null
+          origin?: string | null
+          potential_value?: number | null
+          proposal_sent_at?: string | null
+          responsible_id: string
+          segment_id?: string | null
+          starts_at: string
+          status?: Database["public"]["Enums"]["meeting_status"]
+          updated_at?: string
+          whatsapp?: string | null
+        }
+        Update: {
+          city?: string | null
+          closed_at?: string | null
+          company?: string | null
+          confirmed_at?: string | null
+          created_at?: string
+          created_by?: string
+          duration_min?: number
+          held_at?: string | null
+          id?: string
+          instagram?: string | null
+          lead_name?: string
+          lost_at?: string | null
+          next_action?: string | null
+          no_show_at?: string | null
+          notes?: string | null
+          origin?: string | null
+          potential_value?: number | null
+          proposal_sent_at?: string | null
+          responsible_id?: string
+          segment_id?: string | null
+          starts_at?: string
+          status?: Database["public"]["Enums"]["meeting_status"]
+          updated_at?: string
+          whatsapp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meetings_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meetings_responsible_id_fkey"
+            columns: ["responsible_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meetings_segment_id_fkey"
+            columns: ["segment_id"]
+            isOneToOne: false
+            referencedRelation: "segments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_templates: {
+        Row: {
+          body: string
+          category: Database["public"]["Enums"]["template_category"]
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          category: Database["public"]["Enums"]["template_category"]
+          created_at?: string
+          id?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          category?: Database["public"]["Enums"]["template_category"]
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          active: boolean
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          email?: string
+          full_name?: string
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      segments: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      admin_exists: { Args: never; Returns: boolean }
+      bootstrap_first_admin: { Args: { _user_id: string }; Returns: boolean }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_active_user: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "sdr"
+      meeting_status:
+        | "agendada"
+        | "confirmada"
+        | "realizada"
+        | "nao_compareceu"
+        | "reagendar"
+        | "proposta_enviada"
+        | "fechado"
+        | "perdido"
+      template_category:
+        | "confirmacao"
+        | "lembrete"
+        | "nao_comparecimento"
+        | "follow_up"
+        | "proposta"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +414,25 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "sdr"],
+      meeting_status: [
+        "agendada",
+        "confirmada",
+        "realizada",
+        "nao_compareceu",
+        "reagendar",
+        "proposta_enviada",
+        "fechado",
+        "perdido",
+      ],
+      template_category: [
+        "confirmacao",
+        "lembrete",
+        "nao_comparecimento",
+        "follow_up",
+        "proposta",
+      ],
+    },
   },
 } as const

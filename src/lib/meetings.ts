@@ -29,11 +29,11 @@ export function findConflicts(list: Slot[]): Set<string> {
   const out = new Set<string>();
   const active = list.filter((m) => !NON_BLOCKING.includes(m.status));
   for (let i = 0; i < active.length; i++) {
-    const a = active[i];
+    const a = active[i]!;
     const aS = new Date(a.starts_at).getTime();
     const aE = aS + a.duration_min * 60000;
     for (let j = i + 1; j < active.length; j++) {
-      const b = active[j];
+      const b = active[j]!;
       if (a.responsible_id !== b.responsible_id) continue;
       const bS = new Date(b.starts_at).getTime();
       const bE = bS + b.duration_min * 60000;

@@ -13,7 +13,7 @@ const partsFmt = new Intl.DateTimeFormat("en-CA", {
 });
 
 export function toLocalParts(d: Date | string): { date: string; time: string } {
-  const p = Object.fromEntries(partsFmt.formatToParts(new Date(d)).map((x) => [x.type, x.value]));
+  const p: { year?: string; month?: string; day?: string; hour?: string; minute?: string } = Object.fromEntries(partsFmt.formatToParts(new Date(d)).map((x) => [x.type, x.value]));
   return { date: `${p.year}-${p.month}-${p.day}`, time: `${p.hour}:${p.minute}` };
 }
 

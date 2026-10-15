@@ -20,7 +20,7 @@ export function useMeetings() {
 export function useSaveMeeting() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, values }: { id?: string; values: MeetingInsert }) => {
+    mutationFn: async ({ id, values }: { id?: string | undefined; values: MeetingInsert }) => {
       if (id) {
         const { error } = await supabase.from("meetings").update(values).eq("id", id);
         if (error) throw error;

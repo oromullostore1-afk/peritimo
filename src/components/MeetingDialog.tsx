@@ -9,6 +9,8 @@ import { fromLocal, toLocalParts, todayLocal } from "@/lib/tz";
 import { useMe, useSegments, useTeam } from "@/lib/useMe";
 import { useDeleteMeeting, useSaveMeeting } from "@/lib/useMeetings";
 
+type F = { lead_name: string; date: string; time: string; whatsapp: string; responsible_id: string; status: string; segment_id: string; origin: string; notes: string; next_action: string; company: string; duration_min: string };
+const EMPTY: F = { lead_name: "", date: "", time: "", whatsapp: "", responsible_id: "", status: "agendada", segment_id: "", origin: "", notes: "", next_action: "", company: "", duration_min: "30" };
 const sel = "h-9 w-full rounded-md border border-input bg-background px-3 text-sm";
 
 type Props = {
@@ -25,7 +27,7 @@ export function MeetingDialog({ open, onOpenChange, meeting, defaultDate, defaul
   const { data: segments } = useSegments();
   const save = useSaveMeeting();
   const del = useDeleteMeeting();
-  const [f, setF] = useState<Record<string, string>>({});
+  const [f, setF] = useState<F>(EMPTY);
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export function MeetingDialog({ open, onOpenChange, meeting, defaultDate, defaul
     }
   }, [open, meeting, defaultDate, defaultTime, me?.id]);
 
-  const set = (k: string) => (e: { target: { value: string } }) => setF((s) => ({ ...s, [k]: e.target.value }));
+  const set = (k: keyof F) => (e: { target: { value: string } }) => setF((s) => ({ ...s, [k]: e.target.value }));
   const people = (team ?? []).filter((p) => p.active || p.id === f.responsible_id);
   const canPickResponsible = !!me?.isAdmin;
   const creator = meeting ? team?.find((p) => p.id === meeting.created_by)?.full_name : me?.profile?.full_name;
@@ -60,7 +62,7 @@ export function MeetingDialog({ open, onOpenChange, meeting, defaultDate, defaul
     if ((f.whatsapp ?? "").replace(/\D/g, "").length < 10) return setErr("Informe um WhatsApp válido com DDD.");
     if (!f.responsible_id) return setErr("Selecione o responsável.");
     await save.mutateAsync({
-      id: meeting?.id,
+      ...(meeting ? { id: meeting.id } : {}),
       values: {
         lead_name: f.lead_name.trim(), starts_at: fromLocal(f.date, f.time).toISOString(),
         whatsapp: f.whatsapp.trim(), responsible_id: f.responsible_id, status: f.status as MeetingStatus,

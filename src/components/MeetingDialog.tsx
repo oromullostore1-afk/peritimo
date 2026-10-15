@@ -17,8 +17,8 @@ type Props = {
   open: boolean;
   onOpenChange: (o: boolean) => void;
   meeting?: Meeting | null;
-  defaultDate?: string;
-  defaultTime?: string;
+  defaultDate?: string | undefined;
+  defaultTime?: string | undefined;
 };
 
 export function MeetingDialog({ open, onOpenChange, meeting, defaultDate, defaultTime }: Props) {

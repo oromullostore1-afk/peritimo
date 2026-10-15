@@ -28,7 +28,7 @@ function Page() {
   const month = anchor.slice(0, 7);
   const move = (n: number) => setAnchor(view === "semana" ? addDays(anchor, 7 * n) : addMonths(anchor, n));
   const title = view === "semana"
-    ? `${fmtDay(days[0], { day: "2-digit", month: "short" })} – ${fmtDay(days[6], { day: "2-digit", month: "short" })}`
+    ? `${fmtDay(days[0]!, { day: "2-digit", month: "short" })} – ${fmtDay(days[6]!, { day: "2-digit", month: "short" })}`
     : fmtDay(startOfMonth(anchor), { month: "long", year: "numeric" });
 
   return (

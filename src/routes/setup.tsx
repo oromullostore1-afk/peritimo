@@ -36,7 +36,7 @@ function Setup() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (form.password.length < 8) return toast.error("A senha deve ter pelo menos 8 caracteres.");
+    if (form.password.length < 8) { toast.error("A senha deve ter pelo menos 8 caracteres."); return; }
     setLoading(true);
     try {
       await bootstrap({ data: form });

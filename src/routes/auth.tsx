@@ -44,14 +44,14 @@ function AuthPage() {
     if (mode === "login") {
       const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
       setLoading(false);
-      if (error) return toast.error("E-mail ou senha inválidos.");
+      if (error) { toast.error("E-mail ou senha inválidos."); return; }
       navigate({ to: "/dashboard", replace: true });
     } else {
       const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
         redirectTo: `${window.location.origin}/reset-password`,
       });
       setLoading(false);
-      if (error) return toast.error("Não foi possível enviar o e-mail. Tente novamente em instantes.");
+      if (error) { toast.error("Não foi possível enviar o e-mail. Tente novamente em instantes."); return; }
       toast.success("Se o e-mail estiver cadastrado, você receberá um link para redefinir a senha.");
       setMode("login");
     }
